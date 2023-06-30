@@ -29,17 +29,8 @@
       <v-btn icon @click.stop="miniVariant = !miniVariant">
         <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
       </v-btn>
-      <v-btn icon @click.stop="clipped = !clipped">
-        <v-icon>mdi-application</v-icon>
-      </v-btn>
-      <v-btn icon @click.stop="fixed = !fixed">
-        <v-icon>mdi-minus</v-icon>
-      </v-btn>
-      <v-toolbar-title>{{ title }}</v-toolbar-title>
-      <v-spacer />
-      <v-btn icon @click.stop="rightDrawer = !rightDrawer">
-        <v-icon>mdi-menu</v-icon>
-      </v-btn>
+      <v-spacer/>
+      <v-spacer/>
     </v-app-bar>
     <v-main>
       <v-container>
@@ -72,14 +63,39 @@ export default {
       fixed: false,
       items: [
         {
-          icon: 'mdi-apps',
-          title: 'Welcome',
+          icon: 'mdi-chart-bubble',
+          title: 'Início',
           to: '/',
         },
         {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire',
+          icon: 'mdi-cart-variant',
+          title: 'Produtos',
+          to: '/admin/Produtos',
+        },
+        {
+          icon: 'mdi-bookshelf',
+          title: 'Categorias',
+          to: '/admin/Categorias',
+        },{
+          icon: 'mdi-cash-register',
+          title: 'Pagamentos',
+          to: '/admin/Pagamentos',
+        },{
+          icon: 'mdi-sale',
+          title: 'Cupons',
+          to: '/admin/Cupons',
+        },{
+          icon: 'mdi-account',
+          title: 'Usuários',
+          to: '/admin/Usuarios',
+        },{
+          icon: 'mdi-shield-home',
+          title: 'Endereços',
+          to: '/admin/Enderecos',
+        },{
+          icon: 'mdi-basket',
+          title: 'Pedidos',
+          to: '/admin/Pedidos',
         },
       ],
       miniVariant: false,
