@@ -64,13 +64,14 @@
               ></v-text-field>
             </v-col>
             <v-col>
-              <v-text-field
-              v-model="nome"
+              <v-autocomplete
+              v-model="pagar"
               outlined
               color="accent"
-              label="Pagamento feito por:"
-              placeholder="Pagamento feito por:"
-              ></v-text-field>
+              label="Pagamento:"
+              placeholder="Pagamento:"
+              :items="pagarCom"
+              ></v-autocomplete>
             </v-col>
           </v-row>
         </v-card-title>
@@ -93,8 +94,9 @@ export default {
       search: null,
       items: [],
       id: null,
-      nome: null,
+      pagar: null,
       dialog: false,
+      pagarCom: ['Dinheiro', 'Crédito', 'Débito', 'À vistá', 'À prazo', 'PIX'],
       headers: [
         {
           text: 'id',
@@ -102,7 +104,7 @@ export default {
           align: 'center'
         },
         {
-          text: 'Nome',
+          text: 'Tipo de pagamento',
           value: 'name',
           align: 'center'
         },
@@ -118,14 +120,14 @@ export default {
 
     update(item) {
       this.id = item.id
-      this.nome = item.name
+      this.pagar = item.name
       this.dialog = true
     },
     
     async persist() {
       try {
         const request = {
-          name: this.nome
+          name: this.pagar
         }
         if (this.id) {
           await this.$api.patch(`/payments/persist/${this.id}`, request);
@@ -135,7 +137,7 @@ export default {
           this.$toast.info('Pagamento registrado com sucesso!')
         }
         this.id = null
-        this.nome = null
+        this.pagar = null
         this.dialog = false
         await this.getPagamentos();
       } catch (error) {

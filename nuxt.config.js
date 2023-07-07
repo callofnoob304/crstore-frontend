@@ -25,6 +25,7 @@ export default {
   plugins: [
     '@/plugins/axios.js',
     '@/plugins/vue-toastification.js',
+    '@/plugins/mask.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -58,7 +59,7 @@ export default {
       themes: {
         dark: {
           primary: '#2e282a',
-          secondary: '#17bebb',
+          secondary: '#17bebb', 
           accent: '#edb88b',
           info: '#fad8d6',
           warning: '#cd5334',

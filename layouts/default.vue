@@ -56,46 +56,23 @@
 <script>
 export default {
   name: 'DefaultLayout',
+
   data() {
     return {
       clipped: false,
       drawer: false,
       fixed: false,
+      logout: false,
       items: [
         {
-          icon: 'mdi-chart-bubble',
-          title: 'Início',
-          to: '/',
+          icon: 'mdi-store',
+          title: 'Loja CRS',
+          to: '/admin/Loja'
         },
         {
-          icon: 'mdi-cart-variant',
-          title: 'Produtos',
-          to: '/admin/Produtos',
-        },
-        {
-          icon: 'mdi-bookshelf',
-          title: 'Categorias',
-          to: '/admin/Categorias',
-        },{
-          icon: 'mdi-cash-register',
-          title: 'Pagamentos',
-          to: '/admin/Pagamentos',
-        },{
-          icon: 'mdi-sale',
-          title: 'Cupons',
-          to: '/admin/Cupons',
-        },{
-          icon: 'mdi-account',
-          title: 'Usuários',
-          to: '/admin/Usuarios',
-        },{
-          icon: 'mdi-shield-home',
-          title: 'Endereços',
-          to: '/admin/Enderecos',
-        },{
-          icon: 'mdi-basket',
-          title: 'Pedidos',
-          to: '/admin/Pedidos',
+          icon: 'mdi-shield-key',
+          title: 'ADMIN LOJA-CRS',
+          to: '/admin/ADM',
         },
       ],
       miniVariant: false,
@@ -104,5 +81,14 @@ export default {
       title: 'Vuetify.js',
     }
   },
+
+  methods: {
+    remove() {
+      // if () {
+      //   this.items.pop();
+        
+      // }
+    }
+  }
 }
 </script>

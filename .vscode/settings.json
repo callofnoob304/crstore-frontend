@@ -1,0 +1,7 @@
+{
+  "editor.tabSize": 2,
+  "editor.bracketPairColorization.enabled": true,
+  "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+  "editor.colorDecorators": true,
+  "editor.pasteAs.enabled": true
+}

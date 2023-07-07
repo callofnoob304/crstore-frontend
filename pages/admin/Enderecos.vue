@@ -53,8 +53,8 @@
     >
       <v-card>
         <v-card-title>
-          <v-row>
-            <v-col cols="1">
+          <v-row justify="center">
+            <v-col cols="5">
               <v-text-field
               v-model="id"
               outlined
@@ -62,8 +62,6 @@
               label="Id:"
               placeholder="Id:"
               ></v-text-field>
-            </v-col>
-            <v-col cols="2">
               <v-text-field
               v-model="zipCode"
               outlined
@@ -71,8 +69,6 @@
               label="Código"
               placeholder="Código"
               ></v-text-field>
-            </v-col>
-            <v-col>
               <v-text-field
               v-model="state"
               outlined
@@ -80,8 +76,6 @@
               label="Estado"
               placeholder="Estado"
               ></v-text-field>
-            </v-col>
-            <v-col>
               <v-text-field
               v-model="city"
               outlined
@@ -89,8 +83,6 @@
               label="Cidade"
               placeholder="Cidade"
               ></v-text-field>
-            </v-col>
-            <v-col cols="2">
               <v-text-field
               v-model="street"
               outlined
@@ -98,8 +90,6 @@
               label="Rua"
               placeholder="Rua"
               ></v-text-field>
-            </v-col>
-            <v-col cols="2">
               <v-text-field
               v-model="district"
               outlined
@@ -107,8 +97,6 @@
               label="Distrito"
               placeholder="Distrito"
               ></v-text-field>
-            </v-col>
-            <v-col cols="2">
               <v-text-field
               v-model="numberForget"
               outlined
@@ -116,6 +104,16 @@
               label="Número"
               placeholder="Número"
               ></v-text-field>
+              <v-autocomplete
+              v-model="idUser"
+              outlined
+              color="accent"
+              label="Usuário"
+              placeholder="Usuário"
+              item-text="name"
+              item-value="id"
+              :items="users"
+              ></v-autocomplete>
             </v-col>
             </v-row>
         </v-card-title>
@@ -131,7 +129,7 @@
 </template>
 <script>
 export default {
-  name: "Cupons",
+  name: "Endereços",
 
   data() {
     return {
@@ -144,6 +142,8 @@ export default {
       street: null,
       district: null,
       numberForget: null,
+      idUser: null,
+      users: [],
       dialog: false,
       headers: [
         {
@@ -187,6 +187,7 @@ export default {
   },
   async created() {
     await this.getEnderecos();
+    await this.getUsuarios();
   },
 
   methods: {
@@ -199,6 +200,7 @@ export default {
       this.street = item.street
       this.district = item.district
       this.numberForget = item.numberForget
+      this.idUser = item.name
       this.dialog = true
     },
     
@@ -212,13 +214,14 @@ export default {
           street: this.street,
           district: this.district,
           numberForget: this.numberForget,
+          idUser: this.idUser
         }
         if (this.id) {
-          await this.$api.patch(`/cupons/persist/${this.id}`, request);
-          this.$toast.info('Cupom editado com sucesso!')
+          await this.$api.patch(`/adresses/persist/${this.id}`, request);
+          this.$toast.info('Endereço editado com sucesso!')
         } else {
-          await this.$api.post(`/cupons/persist`, request);
-          this.$toast.info('Cupom registrado com sucesso!')
+          await this.$api.post(`/adresses/persist`, request);
+          this.$toast.info('Endereço registrado com sucesso!')
         }
         this.id = null 
         this.zipCode = null 
@@ -227,6 +230,7 @@ export default {
         this.street = null
         this.district = null
         this.numberForget = null
+        this.idUser = null
         this.dialog = false
         await this.getEnderecos();
       } catch (error) {
@@ -236,8 +240,8 @@ export default {
 
     async destroy(item) {
       try {
-        await this.$api.delete(`/cupons/destroy/${item.id}`)
-        this.$toast.info('Cupom deletado com sucesso!')
+        await this.$api.delete(`/adresses/destroy/${item.id}`)
+        this.$toast.info('Endereço deletado com sucesso!')
         await this.getEnderecos()
       } catch (error) {
         return this.$toast.error('Moio delete')
@@ -246,8 +250,17 @@ export default {
       
     async getEnderecos() {
       try {
-        const response = await this.$api.get('/cupons');
+        const response = await this.$api.get('/adresses');
         this.items = response.data;
+      } catch (error) {
+        return this.$toast.error('Moio get');
+      }
+    },
+
+    async getUsuarios() {
+      try {
+        const response = await this.$api.get('/users');
+        this.users = response.data;
       } catch (error) {
         return this.$toast.error('Moio get');
       }

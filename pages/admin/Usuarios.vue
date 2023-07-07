@@ -206,28 +206,8 @@ export default {
           align: 'center'
         },
         {
-          text: 'HASH da senha',
-          value: 'passwordHash',
-          align: 'center'
-        },
-        {
-          text: 'Token',
-          value: 'token',
-          align: 'center'
-        },
-        {
-          text: 'Role',
+          text: 'Função',
           value: 'role',
-          align: 'center'
-        },
-        {
-          text: 'Cart',
-          value: 'cart',
-          align: 'center'
-        },
-        {
-          text: 'Recuperação de senha',
-          value: 'recuperation',
           align: 'center'
         },
         {text: '', value: 'actions', filterable: false}
