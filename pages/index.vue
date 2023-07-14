@@ -1,179 +1,112 @@
 <template>
-  <v-container>
-    <v-row class="justify-center mt-12">
-      <v-col cols="8">
+  <v-container class="d-flex align-center" style="height: 100vh;">
+    <v-row class="justify-center">
+      <v-col cols="6">
         <form
-        style="background-color: #f15025; border-radius: 50px; border: solid #fff;"
+        style="background-color: #17bebb; border-radius: 50px; border: solid #fff;"
         >
           <v-row class="text-center">
             <v-col>
-              <h1 style="color: #fff;">Faça seu cadastro</h1>
+              <h1 style="color: #fff;">Acesse sua conta</h1>
             </v-col>
           </v-row>
-          <v-row justify="center">
-            <v-col cols="5">
-              <v-text-field 
-              v-model="username"
-              outlined
-              rounded
-              solo
-              clearable
-              prepend-inner-icon="mdi-account"
-              color="#f15025"
-              label="Nome de usuário"
-              placeholder="Nome de usuário"
-              ></v-text-field>
-            </v-col>
-            <v-col cols="5">
-              <v-text-field
-              v-model="password"
-              outlined
-              rounded
-              solo
-              clearable
-              prepend-inner-icon="mdi-account"
-              color="#f15025"
-              label="Senha"
-              placeholder="Senha"
-              ></v-text-field>
-            </v-col>
-          </v-row>
-          <v-row justify="center">
-            <v-col cols="5">
-              <v-text-field
-              v-model="name"
-              outlined
-              rounded
-              solo
-              clearable
-              prepend-inner-icon="mdi-account"
-              color="#f15025"
-              label="Seu nome"
-              placeholder="Seu nome"
-              ></v-text-field>
-            </v-col>
-            <v-col cols="5">
-              <v-text-field
-              v-model="cpf"
-              v-mask="'###.###.###-##'"
-              outlined
-              rounded
-              solo
-              clearable
-              prepend-inner-icon="mdi-account"
-              color="#f15025"
-              label="CPF"
-              placeholder="CPF"
-              ></v-text-field>
-            </v-col>
-          </v-row>
-          <v-row justify="center">
-            <v-col cols="5">
+          <v-row justify="center ml-5 mr-5">
+            <v-col>
               <v-text-field
               v-model="email"
               outlined
               rounded
               solo
               clearable
-              prepend-inner-icon="mdi-account"
-              color="#f15025"
+              append-icon="mdi-email"
               label="E-mail"
               placeholder="E-mail"
+              :rules="[rules.valido]"
               ></v-text-field>
-            </v-col>
-            <v-col cols="5">
-              <v-autocomplete
-              v-model="role"
-              outlined
-              rounded
-              solo
-              clearable
-              prepend-inner-icon="mdi-account"
-              color="#f15025"
-              label="Função"
-              placeholder="Função"
-              :items="funcoes"  
-              ></v-autocomplete>
             </v-col>
           </v-row>
-          <v-row justify="center">
-            <v-col cols="5">
+          <v-row justify="center ml-5 mr-5">
+            <v-col>
               <v-text-field
-              v-model="phone"
-              v-mask="'(##) # ####-####'"
+                v-model="password"
+                :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                :rules="[rules.valido]"
+                :type="show1 ? 'text' : 'password'"
+                label="Senha"
+                counter
+                outlined
+                rounded
+                solo
+                color="#75DDDD"
+                @click:append="show1 = !show1"
+              ></v-text-field>
+              <!-- <v-text-field
+              v-model="password"
               outlined
               rounded
               solo
               clearable
-              prepend-inner-icon="mdi-account"
-              color="#f15025"
-              label="Telefone"
-              placeholder="Telefone"
-              ></v-text-field>
+              append-icon="mdi-account"
+              label="Senha"
+              placeholder="Senha"
+              ></v-text-field> -->
             </v-col>
           </v-row>
           <v-row class="text-center mb-5">
             <v-col>
               <v-btn
-              class="mr-16"
-              @click="cadastrar"
-              >
-                Cadastrar
-              </v-btn>
+              :disabled="!email || !password"
+              @click="enter"
+              >Entrar</v-btn>
             </v-col>
             <v-col>
               <v-btn
-              class="ml-16"
-              to="/admin/Login"
-              >
-                Fazer login
-              </v-btn>
+              @click="$router.push('/public/cadastro')"
+              >Fazer Cadastro</v-btn>
             </v-col>
           </v-row>
         </form>
       </v-col>
-      </v-row>
+    </v-row>
   </v-container>
 </template>
 
 <script>
 export default {
-  name: 'IndexPage',
+  name: 'Login',
+  layout: 'login',
 
   data() {
     return {
-      username: null,
-      password: null,
-      name: null,
-      cpf: null,
       email: null,
-      role: null,
-      funcoes: ['Comprador', 'Entregador', 'Administrador'],
-      phone: null,
+      password: '',
+      show1: false,
+      show2: true,
+      show3: false,
+      show4: false,
+
+      rules: {
+        valido: input => !!input || 'Campo obrigatório'
+      },
     }
   },
 
   methods: {
-    async cadastrar() {
+    async enter() {
       try {
         const request = {
-          username: this.username,
-          password: this.password,
-          name: this.name,
-          cpf: this.cpf,
           email: this.email,
-          role: this.role,
-          phone: this.phone,
-          cart: {},
-          recuperation: ''
+          password: this.password
         }
-        await this.$api.post('/users/persist', request);
-        this.$toast.info('Você foi cadastrado, agora acesse sua conta!');
-        this.$router.push({ name: 'admin-Login' });
+        const response = await this.$api.get(`/users/login?email=${request.email}&password=${request.password}`);
+        if (response.type === 'success') {
+          localStorage.setItem('crstore-api-token', response.token)
+          return this.$router.push('/public/Loja');
+        }
       } catch (error) {
-        this.$toast.error('Algo deu errado :(')
+        this.$toast.error('Login inválido');
       }
-    }
+    },
   }
 }
 </script>

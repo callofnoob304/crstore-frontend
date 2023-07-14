@@ -1,28 +1,40 @@
 <template>
-  <v-card width="350">
+  <v-card
+  width="350"
+  rounded="xl"
+  color="accent"
+  >
     <v-img
       height="200"
       :src="imagem"
       >
     </v-img>
-    <v-card-title>{{ name }}</v-card-title>
-    <v-card-text class="text--primary">
-      <p>{{ descricao }}</p>
-      <p>{{ preco }}</p>
+    <v-card-title 
+    style="height: 100px;">{{ name }}</v-card-title>
+    <v-card-text 
+    style="height: 100px;" 
+    class="primary--text"
+    >
+      <h3><p>{{ descricao }}</p></h3>
+      <h3><p>R$: {{ preco }}</p></h3>
     </v-card-text>
-    <v-card-actions>
+      <v-card-actions  
+      class="justify-space-around" 
+      style="height: 100px;">
       <v-btn 
-      color="warning" 
-      text
-      outlined
+      style="border: hidden; border-radius: 10px 0 10px 0;"
+      class="primary--text"
+      color="accent"
+      elevation="8"
       @click="buy"
-      > Comprar </v-btn>
+      ><h4> Comprar </h4></v-btn>
       <v-btn 
-      color="warning" 
-      text
-      outlined
+      style="border: hidden; border-radius: 10px 0 10px 0;"
+      class="primary--text"
+      color="accent"
+      elevation="8"
       @click="view"
-      > Visualizar </v-btn>
+      ><h4> Visualizar </h4></v-btn>
     </v-card-actions>
   </v-card>
 </template>

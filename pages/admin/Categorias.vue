@@ -1,31 +1,36 @@
 <!-- eslint-disable vue/valid-v-slot -->
 <template>
   <v-container text-center>
-    <h1 class="mb-10">Cadastro de categorias</h1>
-    <v-card>
+    <h1 class="mb-10 accent--text">Cadastro de categorias</h1>
+    <v-card
+    class="primary"
+    >
       <v-card-title>
         <v-col>
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
           label="Pesquisar"
-          hide-details
-          solo
+          color="black"
+          background-color="info"
+          rounded
           outlined
         ></v-text-field>
         </v-col>
         <v-col cols="1">
         <v-btn
+          class="mb-7 black--text"
           elevation="15"
           fab
           small
-          color="secondary" 
+          color="info" 
           @click="dialog = true">
           <v-icon> mdi-plus </v-icon>
         </v-btn>
         </v-col>
       </v-card-title>
       <v-data-table 
+      style="background-color: #52b788;"
       :headers="headers" 
       :items="items" 
       :search="search"
@@ -51,36 +56,51 @@
     <v-dialog
     v-model="dialog"
     >
-      <v-card>
+      <v-card
+      class="primary"
+      style="overflow: hidden;"
+      >
+      <h1
+      class="accent--text ml-5"
+      >
+        Informações da categoria
+      </h1>
         <v-card-title>
-          <v-row>
+          <v-row justify="center">
             <v-col cols="1">
               <v-text-field
               v-model="id"
               outlined
               disabled
+              background-color="accent"
               label="Id:"
               placeholder="Id:"
               ></v-text-field>
             </v-col>
-            <v-col>
+            <v-col cols="4">
               <v-text-field
               v-model="nome"
               outlined
-              color="accent"
+              solo-inverted
+              color="black"
+              background-color="accent"
               label="Nome da categoria"
               placeholder="Nome da categoria"
               ></v-text-field>
             </v-col>
+            <v-col cols="1">
+              <v-btn
+              class="black--text mt-2"
+              color="info"
+              elevation="8"
+              @click="persist"
+              >
+              Cadastrar
+            </v-btn>
+            </v-col>
           </v-row>
         </v-card-title>
       </v-card>
-      <v-btn 
-        color="warning"
-        @click="persist"
-      >
-        Cadastrar
-      </v-btn>
     </v-dialog>
   </v-container>
 </template>
@@ -112,6 +132,7 @@ export default {
   },
   async created() {
     await this.getCategorias();
+    await this.valida();
   },
 
   methods: {
@@ -159,6 +180,13 @@ export default {
         this.items = response.data;
       } catch (error) {
         return this.$toast.error('moia');
+      }
+    },
+
+    async valida() {
+      const { role } = await this.$api.get('/users/validate');
+      if(role && !(role === 'Administrador')) {
+        this.$router.push('/');
       }
     },
 

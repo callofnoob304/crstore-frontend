@@ -1,31 +1,36 @@
  <!-- eslint-disable vue/valid-v-slot -->
 <template>
   <v-container text-center>
-    <h1 class="mb-10">Cadastro de pedidos</h1>
-    <v-card>
+    <h1 class="mb-10 accent--text">Cadastro de produtos</h1>
+    <v-card 
+    color="primary"
+    >
       <v-card-title>
         <v-col>
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
           label="Pesquisar"
-          hide-details
-          solo
+          color="black"
+          background-color="info"
+          rounded
           outlined
         ></v-text-field>
         </v-col>
         <v-col cols="1">
         <v-btn
+          class="mb-7 black--text"
           elevation="15"
           fab
           small
-          color="secondary" 
+          color="info" 
           @click="dialog = true">
           <v-icon> mdi-plus </v-icon>
         </v-btn>
         </v-col>
       </v-card-title>
-      <v-data-table 
+      <v-data-table
+      style="background-color: #52b788;"
       :headers="headers" 
       :items="items" 
       :search="search"
@@ -51,65 +56,87 @@
     <v-dialog
     v-model="dialog"
     >
-      <v-card>
+      <v-card
+      class="primary"
+      style="overflow: hidden;">
+      <h1
+      class="accent--text ml-5"
+      >
+        Informações do produto
+      </h1>
         <v-card-title>
           <v-row justify="center">
-            <v-col cols="5">
+            <v-col cols="1">
               <v-text-field
               v-model="id"
               outlined
               disabled
+              background-color="accent"
               label="Id:"
-              placeholder="Id:"
               ></v-text-field>
+            </v-col>
+          </v-row>
+        </v-card-title>
+          <v-row justify="center">
+            <v-col cols="5">
               <v-text-field
               v-model="name"
               outlined
-              color="accent"
+              solo-inverted
+              color="black"
+              background-color="accent"
               label="Nome do produto"
-              placeholder="Nome do produto"
               ></v-text-field>
               <v-text-field
               v-model="price"
               outlined
-              color="accent"
+              solo-inverted
+              color="black"
+              background-color="accent"
               label="Valor"
-              placeholder="Valor"
               ></v-text-field>
               <v-text-field
               v-model="image"
               outlined
-              color="accent"
+              solo-inverted
+              color="black"
+              background-color="accent"
               label="Imagem"
-              placeholder="Imagem"
               ></v-text-field>
               <v-text-field
               v-model="description"
               outlined
-              color="accent"
+              solo-inverted
+              color="black"
+              background-color="accent"
               label="Descrição"
-              placeholder="Descrição"
               ></v-text-field>
               <v-autocomplete
               v-model="idCategoria"
+              color="black"
               outlined
-              color="accent"
+              solo-inverted
+              background-color="accent"
               label="Categoria"
-              placeholder="Categoria"
               item-text="name"
               item-value="id"
               :items="categories"
               ></v-autocomplete>
-              </v-col>
-            </v-row>
-        </v-card-title>
+            </v-col>
+          </v-row>
+          <v-row justify="center">
+            <v-col cols="1">
+              <v-btn
+              class="mb-5 black--text"
+              color="info"
+              elevation="8"
+              @click="persist"
+              >
+              Cadastrar
+            </v-btn>
+          </v-col>
+        </v-row>
       </v-card>
-      <v-btn 
-        color="warning"
-        @click="persist"
-      >
-        Cadastrar
-      </v-btn>
     </v-dialog>
   </v-container>
 </template>
@@ -162,9 +189,17 @@ export default {
   async created() {
     await this.getProdutos();
     await this.getCategorias();
+    await this.valida();
   },
 
   methods: {
+
+    async valida() {
+      const { role } = await this.$api.get('/users/validate');
+      if(role && !(role === 'Administrador')) {
+        this.$router.push('/');
+      }
+    },
 
     update(item) {
       this.id = item.id
@@ -188,10 +223,10 @@ export default {
         }
         if (this.id) {
           await this.$api.patch(`/produtos/persist/${this.id}`, request);
-          this.$toast.info('Pedidos editado com sucesso!')
+          this.$toast.info('Produto editado com sucesso!');
         } else {
           await this.$api.post(`/produtos/persist`, request);
-          this.$toast.info('Pedidos registrado com sucesso!')
+          this.$toast.info('Produto registrado com sucesso!');
         }
         this.id = null
         this.name = null
@@ -209,7 +244,7 @@ export default {
     async destroy(item) {
       try {
         await this.$api.delete(`/produtos/destroy/${item.id}`)
-        this.$toast.info('Pedidos deletado com sucesso!')
+        this.$toast.info('Produto deletado com sucesso!')
         await this.getProdutos()
       } catch (error) {
         return this.$toast.error('Moio delete')
@@ -237,4 +272,13 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+.v-btn {
+  cursor: pointer;
+}
+
+.v-btn:hover {
+  transform: scale(1.1);
+  transition: all 1s;
+}
+</style>

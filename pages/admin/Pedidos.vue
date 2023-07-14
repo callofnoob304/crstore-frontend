@@ -1,31 +1,36 @@
 <!-- eslint-disable vue/valid-v-slot -->
 <template>
   <v-container text-center>
-    <h1 class="mb-10">Cadastro de pedidos</h1>
-    <v-card>
+    <h1 class="mb-10 accent--text">Cadastro de pedidos</h1>
+    <v-card
+    class="primary"
+    >
       <v-card-title>
         <v-col>
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
           label="Pesquisar"
-          hide-details
-          solo
+          color="black"
+          background-color="info"
+          rounded
           outlined
         ></v-text-field>
         </v-col>
         <v-col cols="1">
         <v-btn
+          class="mb-7 black--text"
           elevation="15"
           fab
           small
-          color="secondary" 
+          color="info" 
           @click="dialog = true">
           <v-icon> mdi-plus </v-icon>
         </v-btn>
         </v-col>
       </v-card-title>
       <v-data-table 
+      style="background-color: #52b788;"
       :headers="headers" 
       :items="items" 
       :search="search"
@@ -51,91 +56,126 @@
     <v-dialog
     v-model="dialog"
     >
-      <v-card>
+      <v-card
+      class="primary"
+      style="overflow: hidden;"
+      >
+      <h1
+      class="accent--text ml-5"
+      >
+        Informações de pedidos
+      </h1>
         <v-card-title>
           <v-row justify="center">
-            <v-col cols="5">
+            <v-col cols="1">
               <v-text-field
               v-model="id"
               outlined
               disabled
+              background-color="accent"
               label="Id:"
               placeholder="Id:"
               ></v-text-field>
-              <v-autocomplete
-              v-model="status"
-              outlined
-              color="accent"
-              label="Status"
-              placeholder="Status"
-              :items="pedido"
-              ></v-autocomplete>
-              <v-text-field
-              v-model="total"
-              outlined
-              color="accent"
-              label="Total"
-              placeholder="Total"
-              ></v-text-field>
-              <v-autocomplete
-              v-model="totalDiscount"
-              outlined
-              color="accent"
-              label="Total de desconto"
-              placeholder="Total de desconto"
-              :items="descontos"
-              ></v-autocomplete>
-              <v-autocomplete
-              v-model="idUserCostumer"
-              outlined
-              color="accent"
-              label="Comprador"
-              placeholder="Comprador"
-              item-text="name"
-              item-value="id"
-              :items="usuarios.filter(user => user.role === 'Comprador')"
-              ></v-autocomplete>
-              <v-autocomplete
-              v-model="idUserDeliver"
-              outlined
-              color="accent"
-              label="Entregador"
-              placeholder="Entregador"
-              item-text="name"
-              item-value="id"
-              :items="usuarios.filter(user => user.role === 'Entregador')"
-              ></v-autocomplete>
-              <v-text-field
-              v-model="idAdresses"
-              outlined
-              color="accent"
-              label="Endereço"
-              placeholder="Endereço"
-              ></v-text-field>
-              <v-text-field
-              v-model="idPayment"
-              outlined
-              color="accent"
-              label="Pagamento"
-              placeholder="Pagamento"
-              ></v-text-field>
-              <v-text-field
-              v-model="idCupoms"
-              outlined
-              color="accent"
-              label="Cupom"
-              placeholder="Cupom"
-              ></v-text-field>
-              </v-col>
-            </v-row>
+            </v-col>
+          </v-row>
         </v-card-title>
+        <v-row justify="center">
+          <v-col cols="5">
+            <v-autocomplete
+            v-model="status"
+            outlined
+            solo-inverted
+            color="black"
+            background-color="accent"
+            label="Status"
+            placeholder="Status"
+            :items="pedido"
+            ></v-autocomplete>
+            <v-text-field
+            v-model="total"
+            outlined
+            solo-inverted
+            color="black"
+            background-color="accent"
+            label="Total"
+            placeholder="Total"
+            ></v-text-field>
+            <v-autocomplete
+            v-model="totalDiscount"
+            outlined
+            solo-inverted
+            color="black"
+            background-color="accent"
+            label="Total de desconto"
+            placeholder="Total de desconto"
+            :items="descontos"
+            ></v-autocomplete>
+            <v-autocomplete
+            v-model="idUserCostumer"
+            outlined
+            solo-inverted
+            color="black"
+            background-color="accent"
+            label="Comprador"
+            placeholder="Comprador"
+            item-text="name"
+            item-value="id"
+            :items="usuarios.filter(user => user.role === 'Comprador')"
+            ></v-autocomplete>
+            <v-autocomplete
+            v-model="idUserDeliver"
+            outlined
+            solo-inverted
+            color="black"
+            background-color="accent"
+            label="Entregador"
+            placeholder="Entregador"
+            item-text="name"
+            item-value="id"
+            :items="usuarios.filter(user => user.role === 'Entregador')"
+            ></v-autocomplete>
+            <v-text-field
+            v-model="idAdresses"
+            outlined
+            solo-inverted
+            color="black"
+            background-color="accent"
+            label="Endereço"
+            placeholder="Endereço"
+            ></v-text-field>
+            <v-text-field
+            v-model="idPayment"
+            outlined
+            solo-inverted
+            color="black"
+            background-color="accent"
+            label="Pagamento"
+            placeholder="Pagamento"
+            ></v-text-field>
+            <v-text-field
+            v-model="idCupoms"
+            outlined
+            solo-inverted
+            color="black"
+            background-color="accent"
+            label="Cupom"
+            placeholder="Cupom"
+            ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-btn 
+              class="mb-5 black--text"
+              color="info"
+              elevation="8"
+              @click="persist"
+              >
+              Cadastrar
+            </v-btn>
+          </v-col>
+        </v-row>
       </v-card>
-      <v-btn 
-        color="warning"
-        @click="persist"
-      >
-        Cadastrar
-      </v-btn>
     </v-dialog>
   </v-container>
 </template>
@@ -211,9 +251,17 @@ export default {
     await this.getAdress();
     await this.getPayment();
     await this.getCupoms();
+    await this.valida();
   },
 
   methods: {
+
+    async valida() {
+      const { role } = await this.$api.get('/users/validate');
+      if(role && !(role === 'Administrador')) {
+        this.$router.push('/');
+      }
+    },
 
     update(item) {
       this.id = item.id

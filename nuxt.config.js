@@ -58,11 +58,10 @@ export default {
       dark: true,
       themes: {
         dark: {
-          primary: '#2e282a',
-          secondary: '#17bebb', 
-          accent: '#edb88b',
-          info: '#fad8d6',
-          warning: '#cd5334',
+          primary: '#FFFFFF',
+          info: '#75DDDD',
+          accent: '#52b788',
+          warning: '#92140C',
         },
       },
     },

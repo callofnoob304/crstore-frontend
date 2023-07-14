@@ -1,31 +1,34 @@
 <!-- eslint-disable vue/valid-v-slot -->
 <template>
   <v-container text-center>
-    <h1 class="mb-10">Cadastro de endereços</h1>
-    <v-card>
+    <h1 class="mb-10 accent--text">Cadastro de endereços</h1>
+    <v-card class="primary">
       <v-card-title>
         <v-col>
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
           label="Pesquisar"
-          hide-details
-          solo
+          color="black"
+          background-color="info"
+          rounded
           outlined
         ></v-text-field>
         </v-col>
         <v-col cols="1">
         <v-btn
+          class="mb-7 black--text"
           elevation="15"
           fab
           small
-          color="secondary" 
+          color="info" 
           @click="dialog = true">
           <v-icon> mdi-plus </v-icon>
         </v-btn>
         </v-col>
       </v-card-title>
       <v-data-table 
+      style="background-color: #52b788;"
       :headers="headers" 
       :items="items" 
       :search="search"
@@ -51,63 +54,91 @@
     <v-dialog
     v-model="dialog"
     >
-      <v-card>
+      <v-card
+      class="primary"
+      style="overflow: hidden;"
+      >
+      <h1
+      class="accent--text ml-5"
+      >
+        Informações de endereços
+      </h1>
         <v-card-title>
           <v-row justify="center">
-            <v-col cols="5">
+            <v-col cols="1">
               <v-text-field
               v-model="id"
               outlined
               disabled
+              background-color="accent"
               label="Id:"
               placeholder="Id:"
               ></v-text-field>
+            </v-col>
+          </v-row>
+        </v-card-title>
+          <v-row justify="center">
+            <v-col cols="5">
               <v-text-field
               v-model="zipCode"
               outlined
-              color="accent"
+              solo-inverted
+              color="black"
+              background-color="accent"
               label="Código"
               placeholder="Código"
               ></v-text-field>
               <v-text-field
               v-model="state"
               outlined
-              color="accent"
+              solo-inverted
+              color="black"
+              background-color="accent"
               label="Estado"
               placeholder="Estado"
               ></v-text-field>
               <v-text-field
               v-model="city"
               outlined
-              color="accent"
+              solo-inverted
+              color="black"
+              background-color="accent"
               label="Cidade"
               placeholder="Cidade"
               ></v-text-field>
               <v-text-field
               v-model="street"
               outlined
-              color="accent"
+              solo-inverted
+              color="black"
+              background-color="accent"
               label="Rua"
               placeholder="Rua"
               ></v-text-field>
               <v-text-field
               v-model="district"
               outlined
-              color="accent"
+              solo-inverted
+              color="black"
+              background-color="accent"
               label="Distrito"
               placeholder="Distrito"
               ></v-text-field>
               <v-text-field
               v-model="numberForget"
               outlined
-              color="accent"
+              solo-inverted
+              color="black"
+              background-color="accent"
               label="Número"
               placeholder="Número"
               ></v-text-field>
               <v-autocomplete
               v-model="idUser"
               outlined
-              color="accent"
+              solo-inverted
+              color="black"
+              background-color="accent"
               label="Usuário"
               placeholder="Usuário"
               item-text="name"
@@ -116,14 +147,19 @@
               ></v-autocomplete>
             </v-col>
             </v-row>
-        </v-card-title>
+            <v-row justify="center">
+              <v-col cols="1">
+                <v-btn
+                class="mb-5 black--text" 
+                color="info"
+                elevation="8"
+                @click="persist"
+                >
+                Cadastrar
+              </v-btn>
+            </v-col>
+          </v-row>
       </v-card>
-      <v-btn 
-        color="warning"
-        @click="persist"
-      >
-        Cadastrar
-      </v-btn>
     </v-dialog>
   </v-container>
 </template>
@@ -188,6 +224,7 @@ export default {
   async created() {
     await this.getEnderecos();
     await this.getUsuarios();
+    await this.valida();
   },
 
   methods: {
@@ -263,6 +300,13 @@ export default {
         this.users = response.data;
       } catch (error) {
         return this.$toast.error('Moio get');
+      }
+    },
+
+    async valida() {
+      const { role } = await this.$api.get('/users/validate');
+      if(role && !(role === 'Administrador')) {
+        this.$router.push('/');
       }
     },
   }

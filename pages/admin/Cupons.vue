@@ -1,31 +1,34 @@
 <!-- eslint-disable vue/valid-v-slot -->
 <template>
   <v-container text-center>
-    <h1 class="mb-10">Cadastro de cupons</h1>
-    <v-card>
+    <h1 class="mb-10 accent--text">Cadastro de cupons</h1>
+    <v-card class="primary">
       <v-card-title>
         <v-col>
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
           label="Pesquisar"
-          hide-details
-          solo
+          color="black"
+          background-color="info"
+          rounded
           outlined
         ></v-text-field>
         </v-col>
         <v-col cols="1">
         <v-btn
+          class="mb-7 black--text"
           elevation="15"
           fab
           small
-          color="secondary" 
+          color="info" 
           @click="dialog = true">
           <v-icon> mdi-plus </v-icon>
         </v-btn>
         </v-col>
       </v-card-title>
       <v-data-table 
+      style="background-color: #52b788;"
       :headers="headers" 
       :items="items" 
       :search="search"
@@ -51,7 +54,15 @@
     <v-dialog
     v-model="dialog"
     >
-      <v-card>
+      <v-card
+      class="primary"
+      style="overflow: hidden;"
+      >
+      <h1
+      class="accent--text ml-5"
+      >
+        Informações do cupom
+      </h1>
         <v-card-title>
           <v-row>
             <v-col cols="1">
@@ -59,6 +70,7 @@
               v-model="id"
               outlined
               disabled
+              background-color="accent"
               label="Id:"
               placeholder="Id:"
               ></v-text-field>
@@ -67,7 +79,9 @@
               <v-text-field
               v-model="code"
               outlined
-              color="accent"
+              solo-inverted
+              color="black"
+              background-color="accent"
               label="Código"
               placeholder="Código"
               ></v-text-field>
@@ -77,7 +91,9 @@
               v-model="type"
               :items="tipo"
               outlined
-              color="accent"
+              solo-inverted
+              color="black"
+              background-color="accent"
               label="Tipo"
               placeholder="Tipo"
               ></v-autocomplete>
@@ -86,7 +102,9 @@
               <v-text-field
               v-model="value"
               outlined
-              color="accent"
+              solo-inverted
+              color="black"
+              background-color="accent"
               label="Valor"
               placeholder="Valor"
               ></v-text-field>
@@ -96,20 +114,28 @@
               v-model="uses"
               outlined
               multiple
-              color="accent"
+              solo-inverted
+              color="black"
+              background-color="accent"
               label="Vezes usado"
               placeholder="Vezes usado"
               ></v-text-field>
             </v-col>
-            </v-row>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-btn 
+              class="mb-13 ml-10 black--text"
+              color="info"
+              elevation="8"
+              @click="persist"
+              >
+              Cadastrar
+            </v-btn>
+            </v-col>
+          </v-row>
         </v-card-title>
       </v-card>
-      <v-btn 
-        color="warning"
-        @click="persist"
-      >
-        Cadastrar
-      </v-btn>
     </v-dialog>
   </v-container>
 </template>
@@ -158,11 +184,20 @@ export default {
       ],
     }
   },
+  
   async created() {
     await this.getCupoms();
+    await this.valida();
   },
 
   methods: {
+
+    async valida() {
+      const { role } = await this.$api.get('/users/validate');
+      if(role && !(role === 'Administrador')) {
+        this.$router.push('/');
+      }
+    },
 
     update(item) {
       this.id = item.id
