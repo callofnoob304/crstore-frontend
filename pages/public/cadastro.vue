@@ -131,7 +131,7 @@
               class="ml-16 black--text"
               color="info"
               elevation="8"
-              to="/public/Loja"
+              to="/"
               >
                 Fazer login
               </v-btn>
